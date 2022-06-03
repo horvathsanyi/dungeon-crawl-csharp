@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 99
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -1405,7 +1405,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1413,6 +1413,48 @@ TextureImporter:
       bones: []
       spriteID: aa29ce6ee05396242ac1b9bda016b2b2
       internalID: -444315252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_0
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 48
+        width: 20
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 534ba545e8f140045b09ad460f5eeaba
+      internalID: -2016854722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skull_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 194
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f47fcef7ae745824881e9b8e7f5e6556
+      internalID: 180415694
       vertices: []
       indices: 
       edges: []
@@ -1453,6 +1495,7 @@ TextureImporter:
       Torch_5: 730820363
       Crate_2: -911266819
       HealingFountain_1: 592065394
+      Skull_0: 180415694
       Floor_3: -1625921549
       Stairs_0: -1856691589
       Floor_1: 2131328908
@@ -1462,6 +1505,7 @@ TextureImporter:
       Torch_1: -1657363118
       Wall_9: -953351132
       Weapon_6: -617786856
+      Boss_0: -2016854722
       Floor_7: -1033234842
       Weapon_1: 416511653
       Stairs_3: -540034655

@@ -9,14 +9,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
 
         if (GameManager.instance != null)
         {
             Destroy(gameObject);
+            Destroy(player.gameObject);
+            Destroy(floatingTextManager.gameObject);
             return;
         }
 
+        instance = this;
         SceneManager.sceneLoaded += LoadState;
         DontDestroyOnLoad(gameObject);
     }
@@ -29,7 +31,10 @@ public class GameManager : MonoBehaviour
 
     // References
     public Player player;
+    public Weapon weapon;
     public FloatingTextManager floatingTextManager;
+    public Animator deathImage;
+
 
     // Logic
     public int pesos;
@@ -37,8 +42,74 @@ public class GameManager : MonoBehaviour
 
     // Floating text
     public void ShowText(string msg, int fontSize, Color color, Vector3 position, Vector3 motion, float duration)
-    {
+    { 
         floatingTextManager.Show(msg, fontSize, color, position, motion, duration);
+    }
+
+    // Upgrade Weapon
+    public bool TryUpgradeWeapon()
+    {
+        // is the weapon max level?
+        if (weaponPrices.Count <= weapon.weaponLevel) return false;
+
+        if (pesos >= weaponPrices[weapon.weaponLevel])
+        {
+            pesos -= weaponPrices[weapon.weaponLevel];
+            weapon.UpgradeWeapon();
+            return true;
+        }
+
+        return false;
+    }
+
+    //Experience System
+    public int GetCurrentLevel()
+    {
+        int counter = 0;
+        int add = 0;
+
+        while (experience >= add)
+        {
+            add += xpTable[counter];
+            counter++;
+
+            if (counter == xpTable.Count) // Max level
+            {
+                return counter;
+            }
+        }
+
+        return counter;
+
+    }
+
+    public int GetXpToLevel(int level)
+    {
+        int counter = 0;
+        int xp = 0;
+        while (counter < level)
+        {
+            xp += xpTable[counter];
+            counter++;
+        }
+
+        return xp;
+    }
+
+    public void GrantXp(int xp)
+    {
+        int currLevel = GetCurrentLevel();
+        experience += xp;
+        if (currLevel < GetCurrentLevel())
+        {
+            OnLevelUp();
+        }
+    }
+
+    public void OnLevelUp()
+    {
+        Debug.Log("LEVELED UP!");
+        player.OnLevelUp();
     }
 
     // Save State
@@ -53,7 +124,7 @@ public class GameManager : MonoBehaviour
         s += "0" + "|";
         s += pesos.ToString() + "|";
         s += experience.ToString() + "|";
-        s += "0";
+        s += weapon.weaponLevel.ToString();
 
 
         PlayerPrefs.SetString("SaveState", s);
@@ -63,17 +134,33 @@ public class GameManager : MonoBehaviour
 
     public void LoadState(Scene s, LoadSceneMode mode)
     {
-        string[] data = PlayerPrefs.GetString("SaveState").Split('|');
+        Debug.Log("Load state!");
 
         if (!PlayerPrefs.HasKey("SaveState")) return;
 
+        string[] data = PlayerPrefs.GetString("SaveState").Split('|');
+
+
         // Change player skin
         pesos = int.Parse(data[1]);
-        experience = int.Parse(data[2]);
-        // Change weapon level
 
-        Debug.Log("Load state!");
+        //Experience
+        experience = int.Parse(data[2]);
+        if (GetCurrentLevel() != 1)
+        {
+            player.SetLevel(GetCurrentLevel());
+        }
+
+        // Change weapon level
+        weapon.SetWeaponLevel(int.Parse(data[3]));
+
+        player.transform.position = GameObject.Find("SpawnPoint").transform.position;
     }
 
-
+    // Deathmenu and respawn
+    public void Respawn()
+    {
+        deathImage.SetTrigger("Hide");
+        SceneManager.LoadScene("Main");
+    }
 }
